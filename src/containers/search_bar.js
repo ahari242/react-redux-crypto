@@ -8,7 +8,7 @@ import { searchCryptos } from '../actions/index';
 
 
 
-class SearchBar extends Component {
+export default class SearchBar extends Component {
 
   constructor(props) {
     super(props);
@@ -24,7 +24,7 @@ class SearchBar extends Component {
 
   onFormSubmit(event) {
     event.preventDefault();
-    this.props.searchCryptos(this.state.term);
+    this.props.handleSubmit(this.state.term);
   }
 
 
@@ -52,9 +52,3 @@ class SearchBar extends Component {
   }
 }
 
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ searchCryptos: searchCryptos }, dispatch)
-}
-
-export default connect(null, mapDispatchToProps)(SearchBar);

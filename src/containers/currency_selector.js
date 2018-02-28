@@ -19,9 +19,7 @@ class CurrencySelector extends Component {
     this.onInputChange = this.onInputChange.bind(this);     //take onInputChange, bind that function to this (SearchBar) and replace onInputChange with the new bound instance
   }
 
-  onInputChange(event) {
-    // let selectedCurrency = event.target.value
-    let selectedCurrency = event;
+  onInputChange(selectedCurrency) {
     this.props.setCurrency(selectedCurrency);
     this.setState({ currency: selectedCurrency });
   }
@@ -29,9 +27,8 @@ class CurrencySelector extends Component {
 
   renderCurrencyOptions(currency) {
     return (
-      <a className="dropdown-item" href="#" key={currency} onClick={() => this.onInputChange(currency)}>{currency}</a>
+      <div className="dropdown-item" key={currency} onClick={() => this.onInputChange(currency)}>{currency}</div>
     )
-
   }
 
 

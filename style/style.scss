@@ -150,6 +150,16 @@ body{
           outline:none;
           color:$darkergray;
         }
+
+      }
+
+      .dropdown-menu{
+        .dropdown-item{
+
+          &:hover{
+            cursor:pointer;
+          }
+        }
       }
 
     }

@@ -29,6 +29,7 @@ export function fetchCryptos(page, currency){
 export function fetchCrypto(id){
 
   const url = `${ROOT_URL}${id}/`;
+
   const request = axios.get(url,{
     'headers': {
     }
@@ -42,9 +43,10 @@ export function fetchCrypto(id){
 }
 
 
-export function searchCryptos(term){
+export function searchCryptos(term, currency){
 
-  const url = `${ROOT_URL}${term}/`;
+  const url = `${ROOT_URL}${term}/?convert=${currency}`;
+  
   const request = axios.get(url,{
     'headers': {
     }
@@ -59,9 +61,6 @@ export function searchCryptos(term){
     type: SEARCH_CRYPTOS,
     payload: request
   }
-
-  
-
 }
 
 

@@ -12,7 +12,7 @@ import PercentChange from '../components/percent_change';
 import ValueFigure from '../components/value_figure';
 import PageButton from '../components/page_button';
 
-import { fetchCryptos, setCurrency } from '../actions/index';
+import { fetchCryptos, setCurrency, searchCryptos } from '../actions/index';
 
 
 
@@ -24,7 +24,8 @@ class CryptoList extends Component {
 
     this.state = {
       page: 0,
-      loading: true
+      loading: true,
+      searchTerm: ""
     }
 
     this.turnPage = this.turnPage.bind(this);
@@ -33,16 +34,25 @@ class CryptoList extends Component {
     this.renderCrypto = this.renderCrypto.bind(this);
     this.getCryptoList = this.getCryptoList.bind(this);
     this.onBackButtonEvent = this.onBackButtonEvent.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
 
-
-
+    
   }
 
   componentDidMount() {
 
-    window.onpopstate = this.onBackButtonEvent
+    window.onpopstate = this.onBackButtonEvent;
+
+    const { page } = this.props.match.params;
+
+    if (!page || 0 > page || !Number.isInteger(page)) {
+      this.state.page = 0;
+    } else {
+      this.state.page = parseInt(page)
+    }
 
     this.getCryptoList();
+    
   }
 
 
@@ -50,27 +60,25 @@ class CryptoList extends Component {
 
     if (this.props.cryptos != prevProps.cryptos) {
       this.setState({ loading: false })
+
+      this.getCryptoList();
     }
+    
   }
 
 
   getCryptoList() {
-    const { page } = this.props.match.params;
-
-
-    if (!page || 0 > page) {
-      this.setState({ page: 0 })
-
+    if (this.state.searchTerm == "") {
+      this.props.fetchCryptos(this.state.page, this.props.currency)
     } else {
-      this.setState({ page: parseInt(page) })
+      this.props.searchCryptos(this.state.searchTerm, this.props.currency)
     }
-
-    this.props.fetchCryptos(page, this.props.currency)
   }
 
 
 
   onBackButtonEvent(e) {
+    this.setState({page: parseInt(this.props.match.params.page)})
     e.preventDefault();
     this.getCryptoList();
   }
@@ -91,9 +99,15 @@ class CryptoList extends Component {
     this.props.history.push('/' + to)
   }
 
-  changeCurrency(to) {
-    this.props.setCurrency(to);
-    this.props.fetchCryptos(this.state.page, to)
+  changeCurrency(selectedCurr) {
+    this.props.setCurrency(selectedCurr);
+  }
+
+  handleSearch(term) {
+
+    this.setState({searchTerm: term})
+
+    this.props.searchCryptos(term, this.props.currency);
   }
 
 
@@ -131,7 +145,7 @@ class CryptoList extends Component {
     } else {
       bodyContent =
         <tr>
-          <td colspan="8">
+          <td colSpan="8">
             <div className="crypto-list container">
               <ClipLoader color="#cccccc" size="2rem" className="loading-spinner" />
             </div>
@@ -147,7 +161,7 @@ class CryptoList extends Component {
 
         <div className="crypto-list-header">
           <CurrencySelector setCurrency={(curr) => this.changeCurrency(curr)} />
-          <SearchBar />
+          <SearchBar handleSubmit={(term) => this.handleSearch(term)} />
         </div>
         <table className="table">
           <thead>
@@ -207,7 +221,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchCryptos, setCurrency }, dispatch)
+  return bindActionCreators({ fetchCryptos, setCurrency, searchCryptos }, dispatch)
 }
 
 

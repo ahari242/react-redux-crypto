@@ -77,6 +77,10 @@ body {
   color: #4a4a4a;
 }
 
+.crypto-list .crypto-list-header .currency-selector-container .dropdown-menu .dropdown-item:hover, .crypto-list .crypto-list-footer .currency-selector-container .dropdown-menu .dropdown-item:hover {
+  cursor: pointer;
+}
+
 .crypto-list .crypto-list-header .search-bar-container, .crypto-list .crypto-list-footer .search-bar-container {
   align-self: flex-end;
 }
